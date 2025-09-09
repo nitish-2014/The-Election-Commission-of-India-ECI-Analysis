@@ -27,5 +27,8 @@ streamlit run app.py
 
 
 You can copy and paste this into a file named `README.md` in your repository root. Want help adding badges, screenshots, or deployment instructions next?
+```
+
+<img width="535" height="295" alt="image" src="https://github.com/user-attachments/assets/c18db1ce-1725-4788-9ba4-293eb554f4fb" />
 
 
