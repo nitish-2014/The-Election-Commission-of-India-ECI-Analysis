@@ -1,0 +1,74 @@
+
+
+import streamlit as st
+from streamlit import sidebar
+from pypdf import PdfReader, PdfWriter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_openai import OpenAIEmbeddings
+
+from langchain_community.vectorstores import FAISS
+
+
+
+
+# upload pdf file
+st.header("My first Chatbot")
+with st.sidebar:
+    st.title("your Document")
+    file=st.sidebar.file_uploader("Upload file and start asking",type="pdf")
+
+#extract the text
+if file is not None:
+    Pdf_Reader=PdfReader(file)
+    text=""
+    for page in Pdf_Reader.pages:    #read all pages
+            text+=page.extract_text()
+           # st.write(text)  #print on screen
+
+
+
+
+   #break into chunks  (better to understand by openai)
+
+    text_splitter = RecursiveCharacterTextSplitter(
+        separators=["\n"],
+        chunk_size=1000,
+        chunk_overlap=150,
+        length_function=len
+    )
+    chunks = text_splitter.split_text(text)
+    #st.write(chunks)
+
+
+
+    #generate embeddings
+    embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+
+    #creating vector store faiss  (embeddings(openai), initializing faiss , store chunks and embeddings
+    vector_store=FAISS.from_texts(chunks,embeddings)
+
+
+
+    #get user question
+    user_question=st.text_input("Type your question here")
+
+
+
+
+    #do similarity search
+    if user_question:  #work only if user give question
+       match=vector_store.similarity_search(user_question)
+       st.write(match)
+
+
+
+
+
+
+
+
+    #output results
+
+
+
+
